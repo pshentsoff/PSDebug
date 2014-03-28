@@ -59,3 +59,31 @@ if(!function_exists('dbg_conlog')) {
         }
     }
 }
+
+defined('DBG_LOGFILE_FILEPATH') or define('DBG_LOGFILE_FILEPATH', dirname(__FILE__) .'/dbg.log' );
+defined('DBG_LOGFILE_TIME_FORMAT') or define('DBG_LOGFILE_TIME_FORMAT', '[ d-m-Y H:i:s ] - ' );
+
+if(!function_exists('filelog')) {
+
+    function filelog($log_msg, $log_file_path = DBG_LOGFILE_FILEPATH, $append_new_line = true, $append_time = true) {
+
+        if(!($f = fopen($log_file_path, "a"))) {
+            throw new Exception('Error open file '.$log_file_path);
+            return false;
+        }
+
+        if($append_time) {
+            $now = date(DBG_LOGFILE_TIME_FORMAT);
+            fwrite($f, $now);
+        }
+
+        fwrite($f, $log_msg);
+
+        if($append_new_line)
+            fwrite($f, "\n");
+
+        fclose($f);
+
+        return true;
+    }
+}
