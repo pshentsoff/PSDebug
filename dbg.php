@@ -20,8 +20,11 @@
 global $dbg;
 
 if(!function_exists('prelog')) {
-    function prelog(&$var){
-        echo '<pre>'.print_r($var, true).'</pre>';
+    function prelog($var, $label = ''){ ?>
+<p><fieldset><legend><?php echo $label; ?></legend><p><pre>
+<?php echo print_r($var, true); ?>
+</pre></p></fieldset></p>
+<?php
     }
 }
 
