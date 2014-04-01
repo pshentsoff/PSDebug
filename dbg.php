@@ -64,11 +64,20 @@ defined('DBG_LOGFILE_FILEPATH') or define('DBG_LOGFILE_FILEPATH', dirname(__FILE
 defined('DBG_LOGFILE_TIME_FORMAT') or define('DBG_LOGFILE_TIME_FORMAT', '[ d-m-Y H:i:s ] - ' );
 
 if(!function_exists('filelog')) {
-
+    /**
+     *  ф. записывает сообщение в лог-файл
+     *
+     * @param $log_msg - записываемое сообщение
+     * @param string $log_file_path - логфайл
+     * @param bool $append_new_line - завершить запись новой строкой
+     * @param bool $append_time - добавить дату - врмя в начало строки
+     * @return bool
+     * @throws Exception если файл не удается открыть/создать
+     */
     function filelog($log_msg, $log_file_path = DBG_LOGFILE_FILEPATH, $append_new_line = true, $append_time = true) {
 
         if(!($f = fopen($log_file_path, "a"))) {
-            throw new Exception('Error open file '.$log_file_path);
+            throw new Exception('Error open or create file '.$log_file_path);
             return false;
         }
 
@@ -85,5 +94,50 @@ if(!function_exists('filelog')) {
         fclose($f);
 
         return true;
+    }
+}
+
+if(!function_exists('get_caller_info')) {
+    /**
+     * Функция возвращает информацию о вызвавшем объекте/функции в виде строки
+     * Строка имеет формат:
+     *      "файл[номер строки]: (объект->)функция"
+     *
+     * @return string - информация о вызвавшем объекте
+     */
+    function get_caller_info() {
+        $file = '';
+        $class = '';
+        $function = '';
+        $line = '';
+        $trace = debug_backtrace();
+        if (isset($trace[2])) {
+            $file = $trace[1]['file'];
+            $line = $trace[1]['line'];
+            $function = $trace[2]['function'];
+            if ((substr($function, 0, 7) == 'include') || (substr($function, 0, 7) == 'require')) {
+                $function = '';
+            }
+        } else if (isset($trace[1])) {
+            $file = $trace[1]['file'];
+            $line = $trace[1]['line'];
+            $function = '';
+        }
+        if (isset($trace[3]['class'])) {
+            $class = $trace[3]['class'];
+            $function = $trace[3]['function'];
+            $file = $trace[2]['file'];
+            $line = $trace[2]['line'];
+        } else if (isset($trace[2]['class'])) {
+            $class = $trace[2]['class'];
+            $function = $trace[2]['function'];
+            $file = $trace[1]['file'];
+            $line = $trace[1]['line'];
+        }
+        //if (isset($file)) $file = basename($file);
+        $result = $file . '['. $line .']: ';
+        $result .= ($class != '') ? ":" . $class . "->" : "";
+        $result .= ($function != '') ? $function . "(): " : "";
+        return $result;
     }
 }
