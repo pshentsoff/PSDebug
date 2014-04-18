@@ -22,7 +22,7 @@
 define('TRACES_MODE', 'TEXTAREA');//'TEXTAREA' or 'FIREPHP'
 $GLOBALS['traces.pre']=array();
 
-function my_array_diff($arr1, $arr2) {
+function tracer_array_diff($arr1, $arr2) {
     foreach ($arr1 as $k=>$v) {
         if (in_array($v, $arr2, true)) {
             unset($arr1[$k]);
@@ -32,7 +32,7 @@ function my_array_diff($arr1, $arr2) {
     return $arr1;
 }
 
-function my_var_export($var, $return = false) {
+function tracer_var_export($var, $return = false) {
 
     $rtn = preg_replace(
         array('/Array\s+\(/', '/\[(\d+)\] => (.*)\n/', '/\[([^\d].*)\] => (.*)\n/'),
@@ -55,7 +55,7 @@ function my_var_export($var, $return = false) {
 
 function tick_handler() {
     $tmp = debug_backtrace();
-    $trace=my_array_diff($tmp, $GLOBALS['traces.pre']);
+    $trace=tracer_array_diff($tmp, $GLOBALS['traces.pre']);
     //echo '<pre>';var_export($trace);echo '</pre>';echo '<br/>'; //for debug diyism_trace.php
     $trace = array_values($trace);
     $GLOBALS['traces.pre'] = $tmp;
@@ -74,7 +74,7 @@ function tick_handler() {
 
 function trace_output($trace) {
     $trace['in_function']=strtr(@$trace['in_function'], array('require'=>'', 'require_once'=>'', 'include'=>'', 'include_once'=>''));
-    $trace['args']=$trace['args']?strtr(preg_replace(array('/\n +/'), array(''), preg_replace(array('/\n  \d+ => /'), array(''), substr(my_var_export($trace['args'], true), 7, -3))), array("\r"=>'\r', "\n"=>'\n')):'';
+    $trace['args']=$trace['args']?strtr(preg_replace(array('/\n +/'), array(''), preg_replace(array('/\n  \d+ => /'), array(''), substr(tracer_var_export($trace['args'], true), 7, -3))), array("\r"=>'\r', "\n"=>'\n')):'';
     return $trace['file'].($trace['in_function']?'/'.$trace['in_function'].'()':'').'/'.$trace['line'].': '.$trace['function'].'('.$trace['args'].')';
 }
 
