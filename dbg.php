@@ -141,3 +141,18 @@ if(!function_exists('get_caller_info')) {
         return $result;
     }
 }
+
+if(!function_exists('print_pre')) {
+    /**
+     * Function for debug tasks
+     * @param $label
+     * @param $var
+     */
+    function print_pre($label, $var) {
+        ?>
+        <p><fieldset><legend><?php echo $label; ?></legend><p><pre>
+<?php echo print_r($var, true); ?>
+</pre></p></fieldset></p>
+<?php }
+}
+

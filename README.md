@@ -1,7 +1,17 @@
-## Небольшая библиотека отладочных инструментов, без претензий. Иногда выручает.
+## debug
+
+Небольшая библиотека отладочных инструментов, без претензий. Часто выручает.
+
+-   Contributors: pshentsoff
+-   [Donate link](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FGRFBSFEW5V3Y "Please, donate to support project")
+-   Tags: wordpress, plugins, posts, events
+-   Author: pshentsoff
+-   [Author's homepage](http://pshentsoff.ru "Author's homepage")
+-   License: Apache License, Version 2.0
+-   License URI: http://www.apache.org/licenses/LICENSE-2.0.html
 
 ### Versions history & todos:
-### Version 0.0.8
+### Version 0.0.9
 
 #### 0.0.7
 -   Прилизан вывод dgb::prelog()
@@ -20,8 +30,6 @@
 +   if(empty($var)) $var = 'CJSConsoleDebug: empty variable';
 
 #### 22/05/2011
-
 +   JSCD: оставить слэши в путях
 -   JSCD: добить вывод в опере
 +   XDebug: xdebug_call_full() - вывод первого элемента, массив уменьшить на вызовы из самих
-
